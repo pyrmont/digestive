@@ -78,9 +78,11 @@
 
 
 (defn bprint [x]
-  (for i 0 (/ (length x) 4)
-    (var res 0)
-    (for j 0 32
-      (set res (+ res (if (buffer/bit x (+ (* 32 i) j)) (math/exp2 j) 0))))
-    (prinf "%08x " res))
+  (var res 0)
+  (def bitcount (* 8 (length x)))
+  (for i 0 bitcount
+    (set res (+ res (if (buffer/bit x i) (math/exp2 (% i 32)) 0)))
+    (when (or (= bitcount (inc i)) (zero? (% (inc i) 32)))
+      (prinf "%08x " res)
+      (set res 0)))
   (print))
