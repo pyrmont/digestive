@@ -1,11 +1,11 @@
 (import ./bitops :as ops)
 
 # Helper functions
-(defn word [b start]
+(defn- word [b start]
   (buffer/slice b start (+ 4 start)))
 
 
-(defn add [& xs]
+(defn- add [& xs]
   (def total (ops/badd ;xs))
   (if (<= (length total) 4)
     total
@@ -21,6 +21,7 @@
 
 # Use buffers as arrays of 32-bit unsigned integers
 (def K (buffer/new 256))
+
 # Use pre-computer table of the integer part of the sines of integers
 (buffer/push-word K 0xd76aa478 0xe8c7b756 0x242070db 0xc1bdceee)
 (buffer/push-word K 0xf57c0faf 0x4787c62a 0xa8304613 0xfd469501)
@@ -40,8 +41,11 @@
 (buffer/push-word K 0xf7537e82 0xbd3af235 0x2ad7d2bb 0xeb86d391)
 
 
-# Function to calculate digest
-(defn digest [input]
+(defn digest
+  ```
+  Calculates a digest of `input` using the MD5 algorithm
+  ```
+  [input]
   # Initialise variables
   (var a0 (buffer/push-word @"" 0x67452301))
   (var b0 (buffer/push-word @"" 0xefcdab89))
@@ -106,4 +110,7 @@
     (set d0 (add d0 D))
 
     (set start (+ start 64)))
-  (buffer ;(map string/reverse [a0 b0 c0 d0])))
+
+  (->> (map string/reverse [a0 b0 c0 d0])
+       (apply buffer)
+       (ops/bstring)))
