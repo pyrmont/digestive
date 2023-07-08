@@ -13,14 +13,14 @@
 
 
 # Specify the per-round shift numbers
-(def s (array 7  12 17 22 7  12 17 22 7  12 17 22 7  12 17 22
+(def- s (array 7  12 17 22 7  12 17 22 7  12 17 22 7  12 17 22
               5  9  14 20 5  9  14 20 5  9  14 20 5  9  14 20
               4  11 16 23 4  11 16 23 4  11 16 23 4  11 16 23
               6  10 15 21 6  10 15 21 6  10 15 21 6  10 15 21))
 
 
 # Use buffers as arrays of 32-bit unsigned integers
-(def K (buffer/new 256))
+(def- K (buffer/new 256))
 
 # Use pre-computer table of the integer part of the sines of integers
 (buffer/push-word K 0xd76aa478 0xe8c7b756 0x242070db 0xc1bdceee)
