@@ -9,9 +9,7 @@
   (def total (ops/badd ;xs))
   (if (<= (length total) 4)
     total
-    (do
-      (ops/badd (buffer/slice total 0 4) (buffer/slice total 4))
-      (buffer/slice total 0 4))))
+    (word total 0)))
 
 
 # Specify the per-round shift numbers
@@ -65,15 +63,6 @@
   # Add low-order 64-bits of input length
   (buffer/push-word msg (* 8 (length input)) 0)
 
-  # (prin "message: ") (pp input)
-  # (ops/bprint (buffer input))
-
-  # (prin "padded message: ") (pp msg)
-  # (ops/bprint msg)
-
-  # (print (length msg) " bytes in padded message")
-  # (print (/ (length msg) 64) " 512-bit block(s) in padded message")
-
   (var start 0)
   (while (< start (length msg))
     (var A a0)
@@ -109,16 +98,7 @@
       (set A D)
       (set D C)
       (set C B)
-      (set B (add B (ops/blrot F (s i))))
-      # (p(string(string/reverse a0) (string/reverseko b0) c0 d0)(string(string/reverse a0) (string/reverseko b0) c0 d0)rintf "b: %d r: %d i: %02d ABCD: %s %s %s %s"
-      #         (/ start 64)
-      #         (math/floor (/ i 16))
-      #         i
-      #         (ops/bstring A)
-      #         (ops/bstring B)
-      #         (ops/bstring C)
-      #         (ops/bstring D))
-      )
+      (set B (add B (ops/blrot F (s i)))))
 
     (set a0 (add a0 A))
     (set b0 (add b0 B))
@@ -126,5 +106,4 @@
     (set d0 (add d0 D))
 
     (set start (+ start 64)))
-  (buffer ;(map string/reverse [a0 b0 c0 d0]))
-  )
+  (buffer ;(map string/reverse [a0 b0 c0 d0])))
