@@ -11,9 +11,8 @@
 
 
 (declare-source
-  :prefix "digestive"
-  :source ["bitops.janet"
-           "md5.janet"])
+  :source ["digestive/bitops.janet"
+           "digestive/md5.janet"])
 
 
 (task "dev-deps" []
