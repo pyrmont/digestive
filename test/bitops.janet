@@ -1,6 +1,6 @@
 (use testament)
 
-(import ../bitops :as bitops)
+(import ../digestive/bitops :as bitops)
 
 
 (deftest bitwise-and
