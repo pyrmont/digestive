@@ -117,7 +117,7 @@
   (for i 0 bitcount
     (set word (+ word (if (buffer/bit x i) (math/exp2 (% i 32)) 0)))
     (when (or (= bitcount (inc i)) (zero? (% (inc i) 32)))
-      (buffer/push buf (string/format "%08x " word))
+      (buffer/push buf (string/format "%08x" word))
       (set word 0)))
   (string buf))
 
