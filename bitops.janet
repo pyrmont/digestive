@@ -4,7 +4,10 @@
 
 (defn band [x y]
   (def res (buffer/new-filled (length x)))
+  (def ylen (* 8 (length y)))
   (for i 0 (* 8 (length x))
+    (if (= i ylen)
+      (break))
     (if (and (buffer/bit x i) (buffer/bit y i))
       (buffer/bit-set res i)))
   res)
@@ -102,7 +105,8 @@
         (set carry false)
         (set reslen (* 8 (length res)))))
     (when (> ylen reslen)
-      (buffer/push-string res (buffer/slice y (- ylen reslen)))))
+      (def start (/ (- ylen reslen) 8))
+      (buffer/push-string res (buffer/slice y start))))
   res)
 
 

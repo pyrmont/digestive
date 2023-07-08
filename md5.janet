@@ -5,6 +5,15 @@
   (buffer/slice b start (+ 4 start)))
 
 
+(defn add [& xs]
+  (def total (ops/badd ;xs))
+  (if (<= (length total) 4)
+    total
+    (do
+      (ops/badd (buffer/slice total 0 4) (buffer/slice total 4))
+      (buffer/slice total 0 4))))
+
+
 # Specify the per-round shift numbers
 (def s (array 7  12 17 22 7  12 17 22 7  12 17 22 7  12 17 22
               5  9  14 20 5  9  14 20 5  9  14 20 5  9  14 20
@@ -49,14 +58,21 @@
   (buffer/push-string msg input)
 
   # Add padding to message
-  (buffer/push msg 0x01)
+  (buffer/push msg 0x80)
   (for i 0 padlen
     (buffer/push msg 0x00))
 
   # Add low-order 64-bits of input length
-  (buffer/push-word msg (length input) 0)
+  (buffer/push-word msg (* 8 (length input)) 0)
 
-  (ops/bprint msg)
+  # (prin "message: ") (pp input)
+  # (ops/bprint (buffer input))
+
+  # (prin "padded message: ") (pp msg)
+  # (ops/bprint msg)
+
+  # (print (length msg) " bytes in padded message")
+  # (print (/ (length msg) 64) " 512-bit block(s) in padded message")
 
   (var start 0)
   (while (< start (length msg))
@@ -89,17 +105,26 @@
           (set F (ops/bxor C (ops/bor B (ops/bnot D))))
           (set g (mod (* 7 i) 16))))
 
-      (set F (ops/badd F A (word K i) (word msg (+ start g))))
+      (set F (add F A (word K (* 4 i)) (word msg (+ start (* 4 g)))))
       (set A D)
       (set D C)
       (set C B)
-      (set B (ops/badd B (ops/blrot F (s i))))
+      (set B (add B (ops/blrot F (s i))))
+      # (p(string(string/reverse a0) (string/reverseko b0) c0 d0)(string(string/reverse a0) (string/reverseko b0) c0 d0)rintf "b: %d r: %d i: %02d ABCD: %s %s %s %s"
+      #         (/ start 64)
+      #         (math/floor (/ i 16))
+      #         i
+      #         (ops/bstring A)
+      #         (ops/bstring B)
+      #         (ops/bstring C)
+      #         (ops/bstring D))
       )
 
-    (set a0 (ops/badd a0 A))
-    (set b0 (ops/badd b0 B))
-    (set c0 (ops/badd c0 C))
-    (set d0 (ops/badd d0 D))
+    (set a0 (add a0 A))
+    (set b0 (add b0 B))
+    (set c0 (add c0 C))
+    (set d0 (add d0 D))
 
     (set start (+ start 64)))
-  (buffer a0 b0 c0 d0))
+  (buffer ;(map string/reverse [a0 b0 c0 d0]))
+  )
