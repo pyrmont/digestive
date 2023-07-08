@@ -1,3 +1,7 @@
+(defn bnew [x]
+  (buffer/push-word @"" x))
+
+
 (defn band [x y]
   (def res (buffer/new-filled (length x)))
   (for i 0 (* 8 (length x))
@@ -66,23 +70,53 @@
 
 
 (defn badd [x & ys]
-  (var res x)
+  (var res (buffer x))
   (each y ys
-    (var carry (band res y))
-    (set res (bxor res y))
-    (while (not (bzero? carry))
-      (def scarry (blshift carry 1))
-      (set carry (band res scarry))
-      (set res (bxor res scarry))))
+    (var carry false)
+    (var reslen (* 8 (length res)))
+    (def ylen (* 8 (length y)))
+    (var i 0)
+    (while (< i reslen)
+      (if (= i ylen)
+        (break))
+      (cond
+        (and (buffer/bit res i) (buffer/bit y i))
+        (do
+          (if (not carry)
+            (buffer/bit-clear res i))
+          (set carry true))
+
+        (buffer/bit res i)
+        (if carry
+          (buffer/bit-clear res i))
+
+        (buffer/bit y i)
+        (if (not carry)
+          (buffer/bit-set res i))
+
+        (when carry
+          (buffer/bit-set res i)
+          (set carry false)))
+      (when (and (= (++ i) reslen) carry)
+        (buffer/push-word res 0x01)
+        (set carry false)
+        (set reslen (* 8 (length res)))))
+    (when (> ylen reslen)
+      (buffer/push-string res (buffer/slice y (- ylen reslen)))))
   res)
 
 
-(defn bprint [x]
-  (var res 0)
+(defn bstring [x]
   (def bitcount (* 8 (length x)))
+  (var buf @"")
+  (var word 0)
   (for i 0 bitcount
-    (set res (+ res (if (buffer/bit x i) (math/exp2 (% i 32)) 0)))
+    (set word (+ word (if (buffer/bit x i) (math/exp2 (% i 32)) 0)))
     (when (or (= bitcount (inc i)) (zero? (% (inc i) 32)))
-      (prinf "%08x " res)
-      (set res 0)))
-  (print))
+      (buffer/push buf (string/format "%08x " word))
+      (set word 0)))
+  (string buf))
+
+
+(defn bprint [x]
+  (print (bstring x)))
