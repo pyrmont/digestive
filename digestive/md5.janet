@@ -14,9 +14,9 @@
 
 # Specify the per-round shift numbers
 (def- s (array 7  12 17 22 7  12 17 22 7  12 17 22 7  12 17 22
-              5  9  14 20 5  9  14 20 5  9  14 20 5  9  14 20
-              4  11 16 23 4  11 16 23 4  11 16 23 4  11 16 23
-              6  10 15 21 6  10 15 21 6  10 15 21 6  10 15 21))
+               5  9  14 20 5  9  14 20 5  9  14 20 5  9  14 20
+               4  11 16 23 4  11 16 23 4  11 16 23 4  11 16 23
+               6  10 15 21 6  10 15 21 6  10 15 21 6  10 15 21))
 
 
 # Use buffers as arrays of 32-bit unsigned integers
@@ -79,21 +79,25 @@
       (var F nil)
       (var g nil)
       (cond
+        # Round 1
         (<= 0 i 15)
         (do
           (set F (ops/bor (ops/band B C) (ops/band (ops/bnot B) D)))
           (set g i))
 
+        # Round 2
         (<= 16 i 31)
         (do
           (set F (ops/bor (ops/band D B) (ops/band (ops/bnot D) C)))
           (set g (mod (+ 1 (* 5 i)) 16)))
 
+        # Round 3
         (<= 32 i 47)
         (do
           (set F (ops/bxor (ops/bxor B C) D))
           (set g (mod (+ (* 3 i) 5) 16)))
 
+        # Round 4
         (do
           (set F (ops/bxor C (ops/bor B (ops/bnot D))))
           (set g (mod (* 7 i) 16))))
