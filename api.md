@@ -1,10 +1,9 @@
 # digestive API
 
-## digestive/md5
 
-[digest](#digest)
+[md5/digest](#md5digest)
 
-## digest
+## md5/digest
 
 **function**  | [source][1]
 
@@ -14,5 +13,5 @@
 
 Calculates a digest of `input` using the MD5 algorithm
 
-[1]: digestive/md5.janet#L44
+[1]: lib/md5.janet#L44
 

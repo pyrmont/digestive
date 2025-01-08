@@ -1,6 +1,6 @@
-(use testament)
+(use ../deps/testament/src/testament)
 
-(import ../digestive/md5 :as md5)
+(import ../lib/md5 :as md5)
 
 
 (deftest digest
