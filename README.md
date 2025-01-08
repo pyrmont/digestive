@@ -18,9 +18,9 @@ Add the dependency to your `project.janet` file:
 Digestive can be used like this:
 
 ```janet
-(import md5)
+(import digestive)
 
-(md5/digest "The quick brown fox jumps over the lazy dog")
+(digestive/md5/digest "The quick brown fox jumps over the lazy dog")
 # => "9e107d9d372bb6826bd81d3542a419d6"
 ```
 
