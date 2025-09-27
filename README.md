@@ -1,16 +1,19 @@
 # Digestive
 
-[![Build Status](https://github.com/pyrmont/digestive/workflows/build/badge.svg)](https://github.com/pyrmont/digestive/actions?query=workflow%3Abuild)
+[![Test Status][icon]][status]
 
-Digestive is a pure Janet library for generating digests.
+[icon]: https://github.com/pyrmont/digestive/workflows/test/badge.svg
+[status]: https://github.com/pyrmont/digestive/actions?query=workflow%3Atest
+
+Digestive is a pure Janet library for generating
+cryptographic digests.
 
 ## Installation
 
-Add the dependency to your `project.janet` file:
+Add the dependency to your `info.jdn` file:
 
 ```janet
-(declare-project
-  :dependencies ["https://github.com/pyrmont/digestive"])
+  :dependencies ["https://github.com/pyrmont/digestive"]
 ```
 
 ## Usage
