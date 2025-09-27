@@ -1,0 +1,20 @@
+{:name "digestive"
+ :version "DEVEL"
+ :description "Create cryptographic digests of strings in pure Janet"
+ :author "Michael Camilleri"
+ :license "MIT"
+ :url "https://github.com/pyrmont/digestive"
+ :repo "git+https://github.com/pyrmont/digestive"
+
+ :vendored {
+   "deps" [
+     {:name "testament"
+      :url "https://github.com/pyrmont/testament"
+      :prefix "testament"
+      :files ["lib/testament.janet"
+              "init.janet"
+              "LICENSE"]}]}
+
+ :source {:prefix "digestive"
+          :files ["lib"
+                  "init.janet"]}}
