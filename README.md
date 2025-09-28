@@ -25,6 +25,9 @@ Digestive can be used like this:
 
 (digestive/md5/digest "The quick brown fox jumps over the lazy dog")
 # => "9e107d9d372bb6826bd81d3542a419d6"
+
+(digestive/sha1/digest "The quick brown fox jumps over the lazy dog")
+# => "2fd4e1c67a2d28fced849ee1bb76e7391b93eb12"
 ```
 
 ## API
