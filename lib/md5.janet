@@ -62,8 +62,13 @@
   (buffer/push msg 0x80)
   (for i 0 padlen
     (buffer/push msg 0x00))
-  # Add low-order 64-bits of input length
-  (buffer/push-word msg (* 8 (length input)) 0)
+  # Input length as bits
+  (def bitlen (ops/blen input))
+  # Extract high 32 bits (word 1) and low 32 bits (word 0) from bitlen
+  (def hi32 (ops/bword bitlen 1))
+  (def lo32 (ops/bword bitlen 0))
+  (buffer/push-string msg lo32)
+  (buffer/push-string msg hi32)
   (var begin 0)
   (while (< begin (length msg))
     (var A a0)

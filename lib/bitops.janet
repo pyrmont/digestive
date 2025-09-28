@@ -63,6 +63,10 @@
       (buffer/bit-set res pos)))
   res)
 
+(defn blen [x]
+  (def res (buffer/push-word @"" (length x)))
+  (blshift res 3))
+
 (defn badd [x & ys]
   (var res (buffer x))
   (each y ys
@@ -96,6 +100,19 @@
       (def start (/ (- ylen reslen) 8))
       (buffer/push-string res (buffer/slice y start))))
   res)
+
+(defn bword [x i]
+  # Extract 4 bytes begining at i * 4
+  (def begin (* i 4))
+  (if (>= begin (length x))
+    (buffer/push-word @"" 0)  # Return 0 if beyond buffer length
+    (do
+      (def end (min (+ begin 4) (length x)))
+      (def res (buffer/slice x begin end))
+      # Pad with zeros if needed
+      (while (< (length res) 4)
+        (buffer/push res 0))
+      res)))
 
 (defn bstring [x]
   (def bitcount (* 8 (length x)))

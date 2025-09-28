@@ -55,6 +55,11 @@
   (def expect (string/format "%08x" (lrot 0xdead 5)))
   (is (== expect actual)))
 
+(deftest bitwise-length
+  (def actual (bitops/blen "foo"))
+  (def expect (buffer/push-word @"" (* 8 (length "foo"))))
+  (is (== expect actual)))
+
 (deftest bitwise-add-equal-length
   (def x (buffer/push-word @"" 0xdead))
   (def y (buffer/push-word @"" 0xbeef))
@@ -74,6 +79,18 @@
   (def y (buffer/push-word @"" 0xbeef))
   (def actual (bitops/bstring (bitops/badd x y)))
   (def expect (string/format "%08x" (+ 0xde 0xbeef)))
+  (is (== expect actual)))
+
+(deftest bitwise-word-high
+  (def x @"\x01\x02\x03\x04\x05\x06\x07\x08")
+  (def actual (bitops/bword x 0))
+  (def expect "\x01\x02\x03\x04")
+  (is (== expect actual)))
+
+(deftest bitwise-word-low
+  (def x @"\x01\x02\x03\x04\x05\x06\x07\x08")
+  (def actual (bitops/bword x 1))
+  (def expect "\x05\x06\x07\x08")
   (is (== expect actual)))
 
 (deftest bitwise-string
