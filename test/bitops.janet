@@ -82,15 +82,35 @@
   (is (== expect actual)))
 
 (deftest bitwise-word-high
-  (def x @"\x01\x02\x03\x04\x05\x06\x07\x08")
+  (def x (buffer "\x01" "\x02" "\x03" "\x04"
+                 "\x05" "\x06" "\x07" "\x08"))
   (def actual (bitops/bword x 0))
   (def expect "\x01\x02\x03\x04")
   (is (== expect actual)))
 
 (deftest bitwise-word-low
-  (def x @"\x01\x02\x03\x04\x05\x06\x07\x08")
+  (def x (buffer "\x01" "\x02" "\x03" "\x04"
+                 "\x05" "\x06" "\x07" "\x08"))
   (def actual (bitops/bword x 1))
   (def expect "\x05\x06\x07\x08")
+  (is (== expect actual)))
+
+(deftest bitwise-word64-high
+  (def x (buffer "\x01" "\x02" "\x03" "\x04"
+                 "\x05" "\x06" "\x07" "\x08"
+                 "\x09" "\x10" "\x11" "\x12"
+                 "\x13" "\x14" "\x15" "\x16"))
+  (def actual (bitops/bword64 x 0))
+  (def expect "\x01\x02\x03\x04\x05\x06\x07\x08")
+  (is (== expect actual)))
+
+(deftest bitwise-word64-low
+  (def x (buffer "\x01" "\x02" "\x03" "\x04"
+                 "\x05" "\x06" "\x07" "\x08"
+                 "\x09" "\x10" "\x11" "\x12"
+                 "\x13" "\x14" "\x15" "\x16"))
+  (def actual (bitops/bword64 x 1))
+  (def expect "\x09\x10\x11\x12\x13\x14\x15\x16")
   (is (== expect actual)))
 
 (deftest bitwise-string

@@ -105,12 +105,25 @@
   # Extract 4 bytes begining at i * 4
   (def begin (* i 4))
   (if (>= begin (length x))
-    (buffer/push-word @"" 0)  # Return 0 if beyond buffer length
+    (buffer/new-filled 4) # Return 0 if beyond buffer length
     (do
       (def end (min (+ begin 4) (length x)))
       (def res (buffer/slice x begin end))
       # Pad with zeros if needed
       (while (< (length res) 4)
+        (buffer/push res 0))
+      res)))
+
+(defn bword64 [x i]
+  # Extract 8 bytes beginning at i * 8
+  (def begin (* i 8))
+  (if (>= begin (length x))
+    (buffer/new-filled 8)  # Return 0 if beyond buffer length
+    (do
+      (def end (min (+ begin 8) (length x)))
+      (def res (buffer/slice x begin end))
+      # Pad with zeros if needed
+      (while (< (length res) 8)
         (buffer/push res 0))
       res)))
 
