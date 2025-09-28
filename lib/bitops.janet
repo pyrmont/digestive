@@ -1,7 +1,6 @@
 (defn bnew [x]
   (buffer/push-word @"" x))
 
-
 (defn band [x y]
   (def res (buffer/new-filled (length x)))
   (def ylen (* 8 (length y)))
@@ -12,14 +11,12 @@
       (buffer/bit-set res i)))
   res)
 
-
 (defn bor [x y]
   (def res (buffer/new-filled (length x)))
   (for i 0 (* 8 (length x))
     (if (or (buffer/bit x i) (buffer/bit y i))
       (buffer/bit-set res i)))
   res)
-
 
 (defn bxor [x y]
   (def res (buffer/new-filled (length x)))
@@ -28,14 +25,12 @@
       (buffer/bit-set res i)))
   res)
 
-
 (defn bnot [x]
   (def res (buffer/new-filled (length x)))
   (for i 0 (* 8 (length x))
     (if (not (buffer/bit x i))
       (buffer/bit-set res i)))
   res)
-
 
 (defn blshift [x n]
   (def res (buffer/new-filled (length x)))
@@ -44,14 +39,12 @@
       (buffer/bit-set res i)))
   res)
 
-
 (defn brushift [x n]
   (def res (buffer/new-filled (length x)))
   (for i n (* 8 (length x))
     (if (buffer/bit x i)
       (buffer/bit-set res (- i n))))
   res)
-
 
 (defn bzero? [x]
   (var i 0)
@@ -61,7 +54,6 @@
     (++ i))
   (= i (length x)))
 
-
 (defn blrot [x n]
   (def res (buffer/new-filled (length x)))
   (def bitlen (* 8 (length x)))
@@ -70,7 +62,6 @@
     (if (buffer/bit x i)
       (buffer/bit-set res pos)))
   res)
-
 
 (defn badd [x & ys]
   (var res (buffer x))
@@ -88,15 +79,12 @@
           (if (not carry)
             (buffer/bit-clear res i))
           (set carry true))
-
         (buffer/bit res i)
         (if carry
           (buffer/bit-clear res i))
-
         (buffer/bit y i)
         (if (not carry)
           (buffer/bit-set res i))
-
         (when carry
           (buffer/bit-set res i)
           (set carry false)))
@@ -109,7 +97,6 @@
       (buffer/push-string res (buffer/slice y start))))
   res)
 
-
 (defn bstring [x]
   (def bitcount (* 8 (length x)))
   (var buf @"")
@@ -120,7 +107,6 @@
       (buffer/push buf (string/format "%08x" word))
       (set word 0)))
   (string buf))
-
 
 (defn bprint [x]
   (print (bstring x)))

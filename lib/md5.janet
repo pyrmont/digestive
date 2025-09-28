@@ -1,23 +1,24 @@
 (import ./bitops :as ops)
 
-# Helper functions
-(defn- word [b start]
-  (buffer/slice b start (+ 4 start)))
+# Helpers
 
-
+# Add multiple values together and get first word
 (defn- add [& xs]
   (def total (ops/badd ;xs))
   (if (<= (length total) 4)
     total
-    (word total 0)))
+    (buffer/slice total 0 4)))
 
+# Get a word from a buffer
+(defn- word [b &opt begin]
+  (default begin 0)
+  (buffer/slice b begin (+ 4 begin)))
 
 # Specify the per-round shift numbers
 (def- s (array 7  12 17 22 7  12 17 22 7  12 17 22 7  12 17 22
                5  9  14 20 5  9  14 20 5  9  14 20 5  9  14 20
                4  11 16 23 4  11 16 23 4  11 16 23 4  11 16 23
                6  10 15 21 6  10 15 21 6  10 15 21 6  10 15 21))
-
 
 # Use buffers as arrays of 32-bit unsigned integers
 (def- K (buffer/new 256))
@@ -40,6 +41,7 @@
 (buffer/push-word K 0x6fa87e4f 0xfe2ce6e0 0xa3014314 0x4e0811a1)
 (buffer/push-word K 0xf7537e82 0xbd3af235 0x2ad7d2bb 0xeb86d391)
 
+# Digest function
 
 (defn digest
   ```
@@ -51,29 +53,23 @@
   (var b0 (buffer/push-word @"" 0xefcdab89))
   (var c0 (buffer/push-word @"" 0x98badcfe))
   (var d0 (buffer/push-word @"" 0x10325476))
-
   # Calculate padding length
   (def padlen (- 56 (mod (+ (length input) 1) 64)))
-
   # Convert input to buffer
   (def msg (buffer/new (+ (length input) 1 padlen 8)))
   (buffer/push-string msg input)
-
   # Add padding to message
   (buffer/push msg 0x80)
   (for i 0 padlen
     (buffer/push msg 0x00))
-
   # Add low-order 64-bits of input length
   (buffer/push-word msg (* 8 (length input)) 0)
-
-  (var start 0)
-  (while (< start (length msg))
+  (var begin 0)
+  (while (< begin (length msg))
     (var A a0)
     (var B b0)
     (var C c0)
     (var D d0)
-
     # Main loop
     (for i 0 64
       (var F nil)
@@ -84,37 +80,33 @@
         (do
           (set F (ops/bor (ops/band B C) (ops/band (ops/bnot B) D)))
           (set g i))
-
         # Round 2
         (<= 16 i 31)
         (do
           (set F (ops/bor (ops/band D B) (ops/band (ops/bnot D) C)))
           (set g (mod (+ 1 (* 5 i)) 16)))
-
         # Round 3
         (<= 32 i 47)
         (do
           (set F (ops/bxor (ops/bxor B C) D))
           (set g (mod (+ (* 3 i) 5) 16)))
-
         # Round 4
         (do
           (set F (ops/bxor C (ops/bor B (ops/bnot D))))
           (set g (mod (* 7 i) 16))))
-
-      (set F (add F A (word K (* 4 i)) (word msg (+ start (* 4 g)))))
+      # Update working variables
+      (set F (add F A (word K (* 4 i)) (word msg (+ begin (* 4 g)))))
       (set A D)
       (set D C)
       (set C B)
       (set B (add B (ops/blrot F (s i)))))
-
+    # Add this chunk's hash to result
     (set a0 (add a0 A))
     (set b0 (add b0 B))
     (set c0 (add c0 C))
     (set d0 (add d0 D))
-
-    (set start (+ start 64)))
-
+    (set begin (+ begin 64)))
+  # Produce the final hash value
   (->> (map string/reverse [a0 b0 c0 d0])
        (apply buffer)
        (ops/bstring)))
