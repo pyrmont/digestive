@@ -127,16 +127,20 @@
         (buffer/push res 0))
       res)))
 
-(defn bstring [x]
-  (def bitcount (* 8 (length x)))
-  (var buf @"")
-  (var word 0)
-  (for i 0 bitcount
-    (set word (+ word (if (buffer/bit x i) (math/exp2 (% i 32)) 0)))
-    (when (or (= bitcount (inc i)) (zero? (% (inc i) 32)))
-      (buffer/push buf (string/format "%08x" word))
-      (set word 0)))
-  (string buf))
+(defn bstring [x &named bits be?]
+  (default bits 32)
+  (def res (buffer/new (* 2 (length x))))
+  (def width (/ bits 8))
+  (var word (buffer/new (* 2 width)))
+  (defn flip [b]
+    (-> (partition 2 b) reverse string/join))
+  (for i 0 (length x)
+    (when (and (> i 0) (zero? (mod i width)))
+      (buffer/push res (if be? (flip word) word))
+      (buffer/clear word))
+    (buffer/push word (string/format "%02x" (get x i))))
+  (buffer/push res (if be? (flip word) word))
+  res)
 
 (defn bprint [x]
   (print (bstring x)))

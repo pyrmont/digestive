@@ -5,40 +5,40 @@
 (deftest bitwise-and
   (def x (buffer/push-word @"" 0xdead))
   (def y (buffer/push-word @"" 0xbeef))
-  (def actual (bitops/bstring (bitops/band x y)))
+  (def actual (bitops/bstring (bitops/band x y) :be? true))
   (def expect (string/format "%08x" (band 0xdead 0xbeef)))
   (is (== expect actual)))
 
 (deftest bitwise-or
   (def x (buffer/push-word @"" 0xdead))
   (def y (buffer/push-word @"" 0xbeef))
-  (def actual (bitops/bstring (bitops/bor x y)))
+  (def actual (bitops/bstring (bitops/bor x y) :be? true))
   (def expect (string/format "%08x" (bor 0xdead 0xbeef)))
   (is (== expect actual)))
 
 (deftest bitwise-xor
   (def x (buffer/push-word @"" 0xdead))
   (def y (buffer/push-word @"" 0xbeef))
-  (def actual (bitops/bstring (bitops/bxor x y)))
+  (def actual (bitops/bstring (bitops/bxor x y) :be? true))
   (def expect (string/format "%08x" (bxor 0xdead 0xbeef)))
   (is (== expect actual)))
 
 (deftest bitwise-not
   (def x (buffer/push-word @"" 0xdead))
-  (def actual (bitops/bstring (bitops/bnot x)))
+  (def actual (bitops/bstring (bitops/bnot x) :be? true))
   (def expect-x (band (bnot (int/u64 0xdead)) 0xFFFFFFFF))
   (def expect (string/format "%08x" expect-x))
   (is (== expect actual)))
 
 (deftest bitwise-lshift
   (def x (buffer/push-word @"" 0xdead))
-  (def actual (bitops/bstring (bitops/blshift x 5)))
+  (def actual (bitops/bstring (bitops/blshift x 5) :be? true))
   (def expect (string/format "%08x" (blshift 0xdead 5)))
   (is (== expect actual)))
 
 (deftest bitwise-rushift
   (def x (buffer/push-word @"" 0xdead))
-  (def actual (bitops/bstring (bitops/brushift x 5)))
+  (def actual (bitops/bstring (bitops/brushift x 5) :be? true))
   (def expect (string/format "%08x" (brushift 0xdead 5)))
   (is (== expect actual)))
 
@@ -50,7 +50,7 @@
 
 (deftest bitwise-blrot
   (def x (buffer/push-word @"" 0xdead))
-  (def actual (bitops/bstring (bitops/blrot x 5)))
+  (def actual (bitops/bstring (bitops/blrot x 5) :be? true))
   (defn lrot [x n] (bor (blshift x n) (brushift n (- 32 n))))
   (def expect (string/format "%08x" (lrot 0xdead 5)))
   (is (== expect actual)))
@@ -63,21 +63,21 @@
 (deftest bitwise-add-equal-length
   (def x (buffer/push-word @"" 0xdead))
   (def y (buffer/push-word @"" 0xbeef))
-  (def actual (bitops/bstring (bitops/badd x y)))
+  (def actual (bitops/bstring (bitops/badd x y) :be? true))
   (def expect (string/format "%08x" (+ 0xdead 0xbeef)))
   (is (== expect actual)))
 
 (deftest bitwise-add-unequal-length-left
   (def x (buffer/push-word @"" 0xdead))
   (def y (buffer/push-word @"" 0xbe))
-  (def actual (bitops/bstring (bitops/badd x y)))
+  (def actual (bitops/bstring (bitops/badd x y) :be? true))
   (def expect (string/format "%08x" (+ 0xdead 0xbe)))
   (is (== expect actual)))
 
 (deftest bitwise-add-unequal-length-right
   (def x (buffer/push-word @"" 0xde))
   (def y (buffer/push-word @"" 0xbeef))
-  (def actual (bitops/bstring (bitops/badd x y)))
+  (def actual (bitops/bstring (bitops/badd x y) :be? true))
   (def expect (string/format "%08x" (+ 0xde 0xbeef)))
   (is (== expect actual)))
 
@@ -114,8 +114,17 @@
   (is (== expect actual)))
 
 (deftest bitwise-string
-  (def actual (bitops/bstring @"\x00\x00\x00\x00"))
-  (def expect "00000000")
-  (is (== expect actual)))
+  (def actual1 (bitops/bstring @"\x00\x00\x00\x00"))
+  (def expect1 "00000000")
+  (is (== expect1 actual1))
+  (def actual2 (bitops/bstring @"\xde\xad\xbe\xef"))
+  (def expect2 "deadbeef")
+  (is (== expect2 actual2))
+  (def actual3 (bitops/bstring @"\x01\x02\x03\x04" :be? true))
+  (def expect3 "04030201")
+  (is (== expect3 actual3))
+  (def actual4 (bitops/bstring @"\x01\x02\x03\x04" :bits 16 :be? true))
+  (def expect4 "02010403")
+  (is (== expect4 actual4)))
 
 (run-tests!)

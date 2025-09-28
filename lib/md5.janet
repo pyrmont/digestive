@@ -116,6 +116,5 @@
     (set d0 (add d0 D))
     (set begin (+ begin 64)))
   # Produce the final hash value
-  (->> (map string/reverse [a0 b0 c0 d0])
-       (apply buffer)
-       (ops/bstring)))
+  (-> (buffer a0 b0 c0 d0)
+      (ops/bstring)))

@@ -9,18 +9,8 @@
     total
     (buffer/slice total 0 8)))
 
-# Print string by reversing order of 32-bit words (why does this work?))
-(defn- bstring [x]
-  (def s (ops/bstring x))
-  (def res (buffer/new-filled (length s)))
-  (for i 0 (length s)
-    (def lo? (< (mod i 16) 8))
-    (def pos (if lo? (+ i 8) (- i 8)))
-    (buffer/push-at res pos (get s i)))
-  (string res))
-
-# Get a big-endian 64-bit word from a little-endian buffer
-(defn- word-be [b begin]
+# Get a 64-bit word from a buffer and flip its endianness
+(defn- word-flip [b begin]
   (def res @"")
   (for i 0 8
     (buffer/push res (get b (+ begin (- 7 i)))))
@@ -128,8 +118,8 @@
   # Extract high 64 bits (word 1) and low 64 bits (word 0) from bitlen
   (def hi64 (ops/bword64 bitlen 1))
   (def lo64 (ops/bword64 bitlen 0))
-  (buffer/push-string msg (word-be hi64 0))
-  (buffer/push-string msg (word-be lo64 0))
+  (buffer/push-string msg (word-flip hi64 0))
+  (buffer/push-string msg (word-flip lo64 0))
   (var begin 0)
   (while (< begin (length msg))
     # Initialize working variables
@@ -145,7 +135,7 @@
     (def W (array/new 80))
     # Copy chunk into first 16 words W[0..15] of the message schedule array
     (for i 0 16
-      (put W i (word-be msg (+ begin (* 8 i)))))
+      (put W i (word-flip msg (+ begin (* 8 i)))))
     # Extend the first 16 words into the remaining 64 words W[16..79]
     (for i 16 80
       (def s1 (small1 (W (- i 2))))
@@ -179,5 +169,5 @@
     (set h7 (add h7 h))
     (set begin (+ begin 128)))
   # Produce the final hash value
-  (->> (buffer h0 h1 h2 h3 h4 h5 h6 h7)
-       (bstring)))
+  (-> (buffer h0 h1 h2 h3 h4 h5 h6 h7)
+      (ops/bstring :bits 64 :be? true)))
