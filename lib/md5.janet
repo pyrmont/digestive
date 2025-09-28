@@ -83,28 +83,32 @@
         # Round 1
         (<= 0 i 15)
         (do
+          # F = (B AND C) OR ((NOT B) AND D)
           (set F (ops/bor (ops/band B C) (ops/band (ops/bnot B) D)))
           (set g i))
         # Round 2
         (<= 16 i 31)
         (do
+          # F = (D AND B) OR ((NOT D) AND C)
           (set F (ops/bor (ops/band D B) (ops/band (ops/bnot D) C)))
           (set g (mod (+ 1 (* 5 i)) 16)))
         # Round 3
         (<= 32 i 47)
         (do
+          # F = B XOR C XOR D
           (set F (ops/bxor (ops/bxor B C) D))
           (set g (mod (+ (* 3 i) 5) 16)))
         # Round 4
         (do
+          # F = C XOR (B OR (NOT D))
           (set F (ops/bxor C (ops/bor B (ops/bnot D))))
           (set g (mod (* 7 i) 16))))
+      (def temp (add F A (word K (* 4 i)) (word msg (+ begin (* 4 g)))))
       # Update working variables
-      (set F (add F A (word K (* 4 i)) (word msg (+ begin (* 4 g)))))
       (set A D)
       (set D C)
       (set C B)
-      (set B (add B (ops/blrot F (s i)))))
+      (set B (add B (ops/blrot temp (s i)))))
     # Add this chunk's hash to result
     (set a0 (add a0 A))
     (set b0 (add b0 B))
