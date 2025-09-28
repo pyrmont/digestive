@@ -37,6 +37,7 @@
          0x90befffa 0xa4506ceb 0xbef9a3f7 0xc67178f2])
 
 # SHA-256 auxiliary functions
+
 (defn- choose [x y z]
   (ops/bxor (ops/band x y) (ops/band (ops/bnot x) z)))
 

@@ -75,8 +75,9 @@
          (join 0x3c9ebe0a 0x15c9bebc) (join 0x431d67c4 0x9c100d4c)
          (join 0x4cc5d4be 0xcb3e42b6) (join 0x597f299c 0xfc657e2a)
          (join 0x5fcb6fab 0x3ad6faec) (join 0x6c44198c 0x4a475817)])
-#
+
 # SHA-512 auxiliary functions
+
 (defn- choose [x y z]
   (ops/bxor (ops/band x y) (ops/band (ops/bnot x) z)))
 
