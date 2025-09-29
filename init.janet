@@ -4,3 +4,4 @@
 (import ./lib/sha2-384 :prefix "sha2-384/" :export true)
 (import ./lib/sha2-512 :prefix "sha2-512/" :export true)
 (import ./lib/sha3-256 :prefix "sha3-256/" :export true)
+(import ./lib/sha3-512 :prefix "sha3-512/" :export true)
