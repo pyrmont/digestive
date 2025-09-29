@@ -1,7 +1,7 @@
 # digestive API
 
 
-[md5/digest](#md5digest), [sha1/digest](#sha1digest), [sha2-256/digest](#sha2-256digest), [sha2-384/digest](#sha2-384digest), [sha2-512/digest](#sha2-512digest), [sha3-256/digest](#sha3-256digest)
+[md5/digest](#md5digest), [sha1/digest](#sha1digest), [sha2-256/digest](#sha2-256digest), [sha2-384/digest](#sha2-384digest), [sha2-512/digest](#sha2-512digest), [sha3-256/digest](#sha3-256digest), [sha3-512/digest](#sha3-512digest)
 
 ## md5/digest
 
@@ -74,4 +74,16 @@ Calculates a digest of `input` using the SHA2-512 algorithm
 Calculates a digest of `input` using the SHA3-256 algorithm
 
 [6]: lib/sha3-256.janet#L143
+
+## sha3-512/digest
+
+**function**  | [source][7]
+
+```janet
+(digest input)
+```
+
+Calculates a digest of `input` using the SHA3-512 algorithm
+
+[7]: lib/sha3-512.janet#L143
 
