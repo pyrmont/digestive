@@ -1,5 +1,4 @@
-(defn bnew [x]
-  (buffer/push-word @"" x))
+# Bitwise functions on arbitrary length little-endian buffers
 
 (defn band [x y]
   (def res (buffer/new-filled (length x)))
@@ -63,9 +62,7 @@
       (buffer/bit-set res pos)))
   res)
 
-(defn blen [x]
-  (def res (buffer/push-word @"" (length x)))
-  (blshift res 3))
+# Utility functions
 
 (defn badd [x & ys]
   (var res (buffer x))
@@ -101,6 +98,31 @@
       (buffer/push-string res (buffer/slice y start))))
   res)
 
+(defn bjoin [hi lo]
+  (def res @"")
+  (buffer/push-word res lo)
+  (buffer/push-word res hi)
+  res)
+
+(defn blen [x]
+  (def res (buffer/push-word @"" (length x)))
+  (blshift res 3))
+
+(defn bstring [x &named bits be?]
+  (default bits 32)
+  (def res (buffer/new (* 2 (length x))))
+  (def width (/ bits 8))
+  (var word (buffer/new (* 2 width)))
+  (defn flip [b]
+    (-> (partition 2 b) reverse string/join))
+  (for i 0 (length x)
+    (when (and (> i 0) (zero? (mod i width)))
+      (buffer/push res (if be? (flip word) word))
+      (buffer/clear word))
+    (buffer/push word (string/format "%02x" (get x i))))
+  (buffer/push res (if be? (flip word) word))
+  res)
+
 (defn bword [x i]
   # Extract 4 bytes begining at i * 4
   (def begin (* i 4))
@@ -126,21 +148,3 @@
       (while (< (length res) 8)
         (buffer/push res 0))
       res)))
-
-(defn bstring [x &named bits be?]
-  (default bits 32)
-  (def res (buffer/new (* 2 (length x))))
-  (def width (/ bits 8))
-  (var word (buffer/new (* 2 width)))
-  (defn flip [b]
-    (-> (partition 2 b) reverse string/join))
-  (for i 0 (length x)
-    (when (and (> i 0) (zero? (mod i width)))
-      (buffer/push res (if be? (flip word) word))
-      (buffer/clear word))
-    (buffer/push word (string/format "%02x" (get x i))))
-  (buffer/push res (if be? (flip word) word))
-  res)
-
-(defn bprint [x]
-  (print (bstring x)))

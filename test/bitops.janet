@@ -2,6 +2,8 @@
 
 (import ../lib/bitops :as bitops)
 
+# Test bitwise functions
+
 (deftest bitwise-and
   (def x (buffer/push-word @"" 0xdead))
   (def y (buffer/push-word @"" 0xbeef))
@@ -48,72 +50,50 @@
   (def expect (zero? 0x00))
   (is (== expect actual)))
 
-(deftest bitwise-blrot
+(deftest bitwise-lrot
   (def x (buffer/push-word @"" 0xdead))
   (def actual (bitops/bstring (bitops/blrot x 5) :be? true))
   (defn lrot [x n] (bor (blshift x n) (brushift n (- 32 n))))
   (def expect (string/format "%08x" (lrot 0xdead 5)))
   (is (== expect actual)))
 
-(deftest bitwise-length
-  (def actual (bitops/blen "foo"))
-  (def expect (buffer/push-word @"" (* 8 (length "foo"))))
-  (is (== expect actual)))
+# Test utility functions
 
-(deftest bitwise-add-equal-length
+(deftest badd-equal-length
   (def x (buffer/push-word @"" 0xdead))
   (def y (buffer/push-word @"" 0xbeef))
   (def actual (bitops/bstring (bitops/badd x y) :be? true))
   (def expect (string/format "%08x" (+ 0xdead 0xbeef)))
   (is (== expect actual)))
 
-(deftest bitwise-add-unequal-length-left
+(deftest badd-unequal-length-left
   (def x (buffer/push-word @"" 0xdead))
   (def y (buffer/push-word @"" 0xbe))
   (def actual (bitops/bstring (bitops/badd x y) :be? true))
   (def expect (string/format "%08x" (+ 0xdead 0xbe)))
   (is (== expect actual)))
 
-(deftest bitwise-add-unequal-length-right
+(deftest badd-unequal-length-right
   (def x (buffer/push-word @"" 0xde))
   (def y (buffer/push-word @"" 0xbeef))
   (def actual (bitops/bstring (bitops/badd x y) :be? true))
   (def expect (string/format "%08x" (+ 0xde 0xbeef)))
   (is (== expect actual)))
 
-(deftest bitwise-word-high
-  (def x (buffer "\x01" "\x02" "\x03" "\x04"
-                 "\x05" "\x06" "\x07" "\x08"))
-  (def actual (bitops/bword x 0))
-  (def expect "\x01\x02\x03\x04")
+(deftest bjoin
+  (def actual1 (bitops/bjoin 0x00000000 0x00000000))
+  (def expect1 @"\x00\x00\x00\x00\x00\x00\x00\x00")
+  (is (== expect1 actual1))
+  (def actual2 (bitops/bjoin 0xdeadbeef 0xcafebabe))
+  (def expect2 @"\xBE\xBA\xFE\xCA\xEF\xBE\xAD\xDE")
+  (is (== expect2 actual2)))
+
+(deftest blen
+  (def actual (bitops/blen "foo"))
+  (def expect (buffer/push-word @"" (* 8 (length "foo"))))
   (is (== expect actual)))
 
-(deftest bitwise-word-low
-  (def x (buffer "\x01" "\x02" "\x03" "\x04"
-                 "\x05" "\x06" "\x07" "\x08"))
-  (def actual (bitops/bword x 1))
-  (def expect "\x05\x06\x07\x08")
-  (is (== expect actual)))
-
-(deftest bitwise-word64-high
-  (def x (buffer "\x01" "\x02" "\x03" "\x04"
-                 "\x05" "\x06" "\x07" "\x08"
-                 "\x09" "\x10" "\x11" "\x12"
-                 "\x13" "\x14" "\x15" "\x16"))
-  (def actual (bitops/bword64 x 0))
-  (def expect "\x01\x02\x03\x04\x05\x06\x07\x08")
-  (is (== expect actual)))
-
-(deftest bitwise-word64-low
-  (def x (buffer "\x01" "\x02" "\x03" "\x04"
-                 "\x05" "\x06" "\x07" "\x08"
-                 "\x09" "\x10" "\x11" "\x12"
-                 "\x13" "\x14" "\x15" "\x16"))
-  (def actual (bitops/bword64 x 1))
-  (def expect "\x09\x10\x11\x12\x13\x14\x15\x16")
-  (is (== expect actual)))
-
-(deftest bitwise-string
+(deftest bstring
   (def actual1 (bitops/bstring @"\x00\x00\x00\x00"))
   (def expect1 "00000000")
   (is (== expect1 actual1))
@@ -126,5 +106,37 @@
   (def actual4 (bitops/bstring @"\x01\x02\x03\x04" :bits 16 :be? true))
   (def expect4 "02010403")
   (is (== expect4 actual4)))
+
+(deftest bword-high
+  (def x (buffer "\x01" "\x02" "\x03" "\x04"
+                 "\x05" "\x06" "\x07" "\x08"))
+  (def actual (bitops/bword x 0))
+  (def expect "\x01\x02\x03\x04")
+  (is (== expect actual)))
+
+(deftest bword-low
+  (def x (buffer "\x01" "\x02" "\x03" "\x04"
+                 "\x05" "\x06" "\x07" "\x08"))
+  (def actual (bitops/bword x 1))
+  (def expect "\x05\x06\x07\x08")
+  (is (== expect actual)))
+
+(deftest bword64-high
+  (def x (buffer "\x01" "\x02" "\x03" "\x04"
+                 "\x05" "\x06" "\x07" "\x08"
+                 "\x09" "\x10" "\x11" "\x12"
+                 "\x13" "\x14" "\x15" "\x16"))
+  (def actual (bitops/bword64 x 0))
+  (def expect "\x01\x02\x03\x04\x05\x06\x07\x08")
+  (is (== expect actual)))
+
+(deftest bword64-low
+  (def x (buffer "\x01" "\x02" "\x03" "\x04"
+                 "\x05" "\x06" "\x07" "\x08"
+                 "\x09" "\x10" "\x11" "\x12"
+                 "\x13" "\x14" "\x15" "\x16"))
+  (def actual (bitops/bword64 x 1))
+  (def expect "\x09\x10\x11\x12\x13\x14\x15\x16")
+  (is (== expect actual)))
 
 (run-tests!)
