@@ -16,7 +16,7 @@
     (buffer/push res (get b (+ begin (- 7 i)))))
   res)
 
-# SHA-512 constants (first 64 bits of the fractional parts of the cube roots
+# SHA2-512 constants (first 64 bits of the fractional parts of the cube roots
 # of the first 80 primes)
 (def- K [(ops/bjoin 0x428a2f98 0xd728ae22) (ops/bjoin 0x71374491 0x23ef65cd)
          (ops/bjoin 0xb5c0fbcf 0xec4d3b2f) (ops/bjoin 0xe9b5dba5 0x8189dbbc)
@@ -59,7 +59,7 @@
          (ops/bjoin 0x4cc5d4be 0xcb3e42b6) (ops/bjoin 0x597f299c 0xfc657e2a)
          (ops/bjoin 0x5fcb6fab 0x3ad6faec) (ops/bjoin 0x6c44198c 0x4a475817)])
 
-# SHA-512 auxiliary functions
+# SHA2-512 auxiliary functions
 
 (defn- choose [x y z]
   (ops/bxor (ops/band x y) (ops/band (ops/bnot x) z)))
@@ -83,10 +83,10 @@
 
 (defn digest
   ```
-  Calculates a digest of `input` using the SHA-512 algorithm
+  Calculates a digest of `input` using the SHA2-512 algorithm
   ```
   [input]
-  # Initialize hash values (SHA-512 uses 8 64-bit words)
+  # Initialize hash values (SHA2-512 uses 8 64-bit words)
   # These are the first 64 bits of the fractional parts of the square roots
   # of the first 8 primes 2..19
   (var h0 (ops/bjoin 0x6a09e667 0xf3bcc908))
@@ -106,7 +106,7 @@
   (buffer/push msg 0x80)
   (for i 0 padlen
     (buffer/push msg 0x00))
-  # Input length as bits (SHA-512 uses 128-bit length field)
+  # Input length as bits (SHA2-512 uses 128-bit length field)
   (def bitlen (ops/blen input))
   # Extract high 64 bits (word 1) and low 64 bits (word 0) from bitlen
   (def hi64 (ops/bword64 bitlen 1))

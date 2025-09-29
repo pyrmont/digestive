@@ -17,7 +17,7 @@
     (buffer/push res (get b (- end i 1))))
   res)
 
-# Pre-computed constants for SHA-1, derived from square roots of primes
+# Pre-computed constants for SHA1, derived from square roots of primes
 (def- K0 (buffer/push-word @"" 0x5A827999))  # sqrt(2)  for rounds 0-19
 (def- K1 (buffer/push-word @"" 0x6ED9EBA1))  # sqrt(3)  for rounds 20-39
 (def- K2 (buffer/push-word @"" 0x8F1BBCDC))  # sqrt(5)  for rounds 40-59
@@ -27,10 +27,10 @@
 
 (defn digest
   ```
-  Calculates a digest of `input` using the SHA-1 algorithm
+  Calculates a digest of `input` using the SHA1 algorithm
   ```
   [input]
-  # Initialize hash values (SHA-1 uses 5 32-bit words)
+  # Initialize hash values (SHA1 uses 5 32-bit words)
   (var h0 (buffer/push-word @"" 0x67452301))
   (var h1 (buffer/push-word @"" 0xEFCDAB89))
   (var h2 (buffer/push-word @"" 0x98BADCFE))

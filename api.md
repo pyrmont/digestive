@@ -23,7 +23,7 @@ Calculates a digest of `input` using the MD5 algorithm
 (digest input)
 ```
 
-Calculates a digest of `input` using the SHA-1 algorithm
+Calculates a digest of `input` using the SHA1 algorithm
 
 [2]: lib/sha1.janet#L28
 
@@ -35,7 +35,7 @@ Calculates a digest of `input` using the SHA-1 algorithm
 (digest input)
 ```
 
-Calculates a digest of `input` using the SHA-256 algorithm
+Calculates a digest of `input` using the SHA2-256 algorithm
 
 [3]: lib/sha2-256.janet#L61
 
@@ -47,7 +47,7 @@ Calculates a digest of `input` using the SHA-256 algorithm
 (digest input)
 ```
 
-Calculates a digest of `input` using the SHA-512 algorithm
+Calculates a digest of `input` using the SHA2-512 algorithm
 
 [4]: lib/sha2-512.janet#L84
 

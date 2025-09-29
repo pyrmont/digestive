@@ -17,7 +17,7 @@
     (buffer/push res (get b (- end i 1))))
   res)
 
-# SHA-256 constants (first 32 bits of the fractional parts of the cube roots
+# SHA2-256 constants (first 32 bits of the fractional parts of the cube roots
 # of the first 64 primes 2..311)
 (def- K [0x428a2f98 0x71374491 0xb5c0fbcf 0xe9b5dba5
          0x3956c25b 0x59f111f1 0x923f82a4 0xab1c5ed5
@@ -36,7 +36,7 @@
          0x748f82ee 0x78a5636f 0x84c87814 0x8cc70208
          0x90befffa 0xa4506ceb 0xbef9a3f7 0xc67178f2])
 
-# SHA-256 auxiliary functions
+# SHA2-256 auxiliary functions
 
 (defn- choose [x y z]
   (ops/bxor (ops/band x y) (ops/band (ops/bnot x) z)))
@@ -60,10 +60,10 @@
 
 (defn digest
   ```
-  Calculates a digest of `input` using the SHA-256 algorithm
+  Calculates a digest of `input` using the SHA2-256 algorithm
   ```
   [input]
-  # Initialize hash values (SHA-256 uses 8 32-bit words)
+  # Initialize hash values (SHA2-256 uses 8 32-bit words)
   # These are the first 32 bits of the fractional parts of the square roots
   # of the first 8 primes 2..19
   (var h0 (buffer/push-word @"" 0x6a09e667))
