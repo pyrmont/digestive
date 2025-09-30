@@ -1,19 +1,21 @@
 # digestive API
 
 
-[blake3-256digest](#blake3-256digest), [md5/digest](#md5digest), [sha1/digest](#sha1digest), [sha2/digest](#sha2digest), [sha3/digest](#sha3digest)
+[blake3digest](#blake3digest), [md5/digest](#md5digest), [sha1/digest](#sha1digest), [sha2/digest](#sha2digest), [sha3/digest](#sha3digest)
 
-## blake3-256digest
+## blake3digest
 
 **function**  | [source][1]
 
 ```janet
-(digest input &opt output-len)
+(digest kind input)
 ```
 
-Calculates a digest of `input` using the BLAKE3-256 algorithm
+Calculates a digest of `input` using the BLAKE3 algorithm
 
-[1]: lib/blake3-256.janet#L303
+The value of `kind` can be `:256`.
+
+[1]: lib/blake3.janet#L303
 
 ## md5/digest
 

@@ -48,7 +48,7 @@ Digestive can be used like this:
 (digestive/sha3/digest :512 "The quick brown fox jumps over the lazy dog")
 # => "01dedd5de4ef14642445ba5f5b97c15e47b9ad931326e4b0727cd94cefc44fff23f07bf543139939b49128caf436dc1bdee54fcb24023a08d9403f9b4bf0d450"
 
-(digestive/blake3-256/digest "The quick brown fox jumps over the lazy dog")
+(digestive/blake3/digest :256 "The quick brown fox jumps over the lazy dog")
 # => "2f1514181aadccd913abd94cfa592701a5686ab23f8df1dff1b74710febc6d4a"
 ```
 

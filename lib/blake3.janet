@@ -6,7 +6,7 @@
 (def- b0 (buffer/new-filled 4))
 (def- b1 (buffer/push-word @"" 1))
 
-# Same as SHA-256's initial hash values
+# Same as SHA2-256's initial hash values
 (def- init-value
       [0x6A09E667 0xBB67AE85 0x3C6EF372 0xA54FF53A
        0x510E527F 0x9B05688C 0x1F83D9AB 0x5BE0CD19])
@@ -302,10 +302,12 @@
 
 (defn digest
   ```
-  Calculates a digest of `input` using the BLAKE3-256 algorithm
+  Calculates a digest of `input` using the BLAKE3 algorithm
+
+  The value of `kind` can be `:256`.
   ```
-  [input &opt output-len]
-  (default output-len output-len-default)
+  [kind input]
+  (def output-len (case kind :256 32))
   (def hasher (init-hasher))
   (hasher-update hasher input)
   (-> (hasher-finalize hasher output-len)
