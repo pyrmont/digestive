@@ -1,9 +1,9 @@
 # digestive API
 
 
-[blake3digest](#blake3digest), [md5/digest](#md5digest), [sha1/digest](#sha1digest), [sha2/digest](#sha2digest), [sha3/digest](#sha3digest)
+[blake3/digest](#blake3digest), [md5/digest](#md5digest), [sha1/digest](#sha1digest), [sha2/digest](#sha2digest), [sha3/digest](#sha3digest)
 
-## blake3digest
+## blake3/digest
 
 **function**  | [source][1]
 
