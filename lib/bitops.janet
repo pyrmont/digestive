@@ -62,6 +62,15 @@
       (buffer/bit-set res pos)))
   res)
 
+(defn brrot [x n]
+  (def res (buffer/new-filled (length x)))
+  (def bitlen (* 8 (length x)))
+  (for i 0 bitlen
+    (def pos (if (>= i n) (- i n) (+ bitlen (- i n))))
+    (if (buffer/bit x i)
+      (buffer/bit-set res pos)))
+  res)
+
 # Utility functions
 
 (defn badd [x & ys]
