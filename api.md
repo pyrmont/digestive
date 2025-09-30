@@ -1,7 +1,7 @@
 # digestive API
 
 
-[blake3-256digest](#blake3-256digest), [md5/digest](#md5digest), [sha1/digest](#sha1digest), [sha2/digest](#sha2digest), [sha3-256/digest](#sha3-256digest), [sha3-512/digest](#sha3-512digest)
+[blake3-256digest](#blake3-256digest), [md5/digest](#md5digest), [sha1/digest](#sha1digest), [sha2/digest](#sha2digest), [sha3/digest](#sha3digest)
 
 ## blake3-256digest
 
@@ -53,27 +53,17 @@ The value of `:kind` can be one of `:256`, `:384` and `:512`.
 
 [4]: lib/sha2.janet#L335
 
-## sha3-256/digest
+## sha3/digest
 
 **function**  | [source][5]
 
 ```janet
-(digest input)
+(digest kind input)
 ```
 
-Calculates a digest of `input` using the SHA3-256 algorithm
+Calculates a digest of `input` using the SHA3 algorithm
 
-[5]: lib/sha3-256.janet#L146
+The value of `kind` can be one of `:256` and `:512`.
 
-## sha3-512/digest
-
-**function**  | [source][6]
-
-```janet
-(digest input)
-```
-
-Calculates a digest of `input` using the SHA3-512 algorithm
-
-[6]: lib/sha3-512.janet#L146
+[5]: lib/sha3.janet#L146
 

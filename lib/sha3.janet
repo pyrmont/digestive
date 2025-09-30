@@ -39,7 +39,7 @@
   [18  2 61 56 14]  # y=4
 ])
 
-# SHA3-256 auxiliary functions
+# SHA3 auxiliary functions
 
 (defn- get-lane
   [state x y]
@@ -145,12 +145,16 @@
 
 (defn digest
   ```
-  Calculates a digest of `input` using the SHA3-256 algorithm
+  Calculates a digest of `input` using the SHA3 algorithm
+
+  The value of `kind` can be one of `:256` and `:512`.
   ```
-  [input]
-  # SHA-3-256 parameters
-  (def rate 136) # r = 1088 bits / 8 = 136 bytes
-  (def output-len 32) # 256 bits / 8 = 32 bytes
+  [kind input]
+  # SHA-3 parameters
+  (def [rate output-len]
+    (case kind
+      :256 [136 32]
+      :512 [72 64]))
   # Initialize state S[x,y] = 0 for all (x,y)
   (var S (buffer/new-filled 200))
   # Pad input
@@ -167,6 +171,6 @@
     # Apply Keccak-f[1600] permutation
     (set S (keccak-f S))
     (set pos (+ pos rate)))
-  # Squeezing phase: extract first 256 bits
+  # Squeezing phase: extract bits
   (def Z (buffer/slice S 0 output-len))
   (ops/bstring Z))
