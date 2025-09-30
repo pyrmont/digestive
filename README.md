@@ -5,6 +5,10 @@
 [icon]: https://github.com/pyrmont/digestive/workflows/test/badge.svg
 [status]: https://github.com/pyrmont/digestive/actions?query=workflow%3Atest
 
+> [!WARNING]
+> The algorithms in Digestive were implemented with the assistance of LLMs.
+> The code has has not been extensively tested.
+
 Digestive is a pure Janet library for generating cryptographic digests. It does
 not require 64-bit integers.
 
@@ -43,6 +47,9 @@ Digestive can be used like this:
 
 (digestive/sha3-512/digest "The quick brown fox jumps over the lazy dog")
 # => "01dedd5de4ef14642445ba5f5b97c15e47b9ad931326e4b0727cd94cefc44fff23f07bf543139939b49128caf436dc1bdee54fcb24023a08d9403f9b4bf0d450"
+
+(digestive/blake3-256/digest "The quick brown fox jumps over the lazy dog")
+# => "2f1514181aadccd913abd94cfa592701a5686ab23f8df1dff1b74710febc6d4a"
 ```
 
 ## API
