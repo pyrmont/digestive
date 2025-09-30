@@ -332,17 +332,23 @@
   # SHA-512 uses all 8 words of output
   (digest64 input init-h 8))
 
-(defn digest
+(defn digest-256
   ```
-  Calculates a digest of `input` using the SHA2 algorithm
+  Calculates a 256-bit digest of `input` using the SHA2 algorithm
+  ```
+  [input]
+  (sha256 input))
 
-  The value of `kind` can be one of `:256`, `:384` and `:512`.
+(defn digest-384
   ```
-  [kind input]
-  (case kind
-    :256
-    (sha256 input)
-    :384
-    (sha384 input)
-    :512
-    (sha512 input)))
+  Calculates a 384-bit digest of `input` using the SHA2 algorithm
+  ```
+  [input]
+  (sha384 input))
+
+(defn digest-512
+  ```
+  Calculates a 512-bit digest of `input` using the SHA2 algorithm
+  ```
+  [input]
+  (sha512 input))

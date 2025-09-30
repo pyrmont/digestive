@@ -26,7 +26,6 @@
 # Block and chunk sizes
 (def- block-len 64)
 (def- chunk-len 1024)
-(def- output-len-default 32)
 
 # Add multiple values together and get first 4 bytes (32-bit word)
 (defn- add [& xs]
@@ -300,15 +299,12 @@
       # Extract root output bytes
       (output-root-bytes output out-len))))
 
-(defn digest
+(defn digest-256
   ```
-  Calculates a digest of `input` using the BLAKE3 algorithm
-
-  The value of `kind` can be `:256`.
+  Calculates a 256-bit digest of `input` using the BLAKE3 algorithm
   ```
-  [kind input]
-  (def output-len (case kind :256 32))
+  [input]
   (def hasher (init-hasher))
   (hasher-update hasher input)
-  (-> (hasher-finalize hasher output-len)
+  (-> (hasher-finalize hasher 32)
       (ops/bstring)))

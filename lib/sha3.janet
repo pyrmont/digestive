@@ -143,18 +143,8 @@
       (buffer/push M 0x80)))
   M)
 
-(defn digest
-  ```
-  Calculates a digest of `input` using the SHA3 algorithm
-
-  The value of `kind` can be one of `:256` and `:512`.
-  ```
-  [kind input]
-  # SHA-3 parameters
-  (def [rate output-len]
-    (case kind
-      :256 [136 32]
-      :512 [72 64]))
+(defn- digest
+  [input rate output-len]
   # Initialize state S[x,y] = 0 for all (x,y)
   (var S (buffer/new-filled 200))
   # Pad input
@@ -174,3 +164,17 @@
   # Squeezing phase: extract bits
   (def Z (buffer/slice S 0 output-len))
   (ops/bstring Z))
+
+(defn digest-256
+  ```
+  Calculates a 256-bit digest of `input` using the SHA3 algorithm
+  ```
+  [input]
+  (digest input 136 32))
+
+(defn digest-512
+  ```
+  Calculates a 512-bit digest of `input` using the SHA3 algorithm
+  ```
+  [input]
+  (digest input 72 64))

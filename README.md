@@ -33,22 +33,22 @@ Digestive can be used like this:
 (digestive/sha1/digest "The quick brown fox jumps over the lazy dog")
 # => "2fd4e1c67a2d28fced849ee1bb76e7391b93eb12"
 
-(digestive/sha2/digest :256 "The quick brown fox jumps over the lazy dog")
+(digestive/sha2/digest-256 "The quick brown fox jumps over the lazy dog")
 # => "d7a8fbb307d7809469ca9abcb0082e4f8d5651e46d3cdb762d02d0bf37c9e592"
 
-(digestive/sha2/digest :384 "The quick brown fox jumps over the lazy dog")
+(digestive/sha2/digest-384 "The quick brown fox jumps over the lazy dog")
 # => "ca737f1014a48f4c0b6dd43cb177b0afd9e5169367544c494011e3317dbf9a509cb1e5dc1e85a941bbee3d7f2afbc9b1"
 
-(digestive/sha2/digest :512 "The quick brown fox jumps over the lazy dog")
+(digestive/sha2/digest-512 "The quick brown fox jumps over the lazy dog")
 # => "07e547d9586f6a73f73fbac0435ed76951218fb7d0c8d788a309d785436bbb642e93a252a954f23912547d1e8a3b5ed6e1bfd7097821233fa0538f3db854fee6"
 
-(digestive/sha3/digest :256 "The quick brown fox jumps over the lazy dog")
+(digestive/sha3/digest-256 "The quick brown fox jumps over the lazy dog")
 # => "69070dda01975c8c120c3aada1b282394e7f032fa9cf32f4cb2259a0897dfc04"
 
-(digestive/sha3/digest :512 "The quick brown fox jumps over the lazy dog")
+(digestive/sha3/digest-512 "The quick brown fox jumps over the lazy dog")
 # => "01dedd5de4ef14642445ba5f5b97c15e47b9ad931326e4b0727cd94cefc44fff23f07bf543139939b49128caf436dc1bdee54fcb24023a08d9403f9b4bf0d450"
 
-(digestive/blake3/digest :256 "The quick brown fox jumps over the lazy dog")
+(digestive/blake3/digest-256 "The quick brown fox jumps over the lazy dog")
 # => "2f1514181aadccd913abd94cfa592701a5686ab23f8df1dff1b74710febc6d4a"
 ```
 
