@@ -54,7 +54,7 @@
   (var c0 (buffer/push-word @"" 0x98badcfe))
   (var d0 (buffer/push-word @"" 0x10325476))
   # Calculate padding length
-  (def padlen (- 56 (mod (+ (length input) 1) 64)))
+  (def padlen (mod (- 55 (mod (length input) 64)) 64))
   # Convert input to buffer
   (def msg (buffer/new (+ (length input) 1 padlen 8)))
   (buffer/push-string msg input)
@@ -103,7 +103,7 @@
           # F = C XOR (B OR (NOT D))
           (set F (ops/bxor C (ops/bor B (ops/bnot D))))
           (set g (mod (* 7 i) 16))))
-      (def temp (add F A (word K (* 4 i)) (word msg (+ begin (* 4 g)))))
+      (def temp (add F A (ops/bword K i) (ops/bword msg (+ (/ begin 4) g))))
       # Update working variables
       (set A D)
       (set D C)

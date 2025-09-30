@@ -73,7 +73,7 @@ Calculates a digest of `input` using the SHA2-512 algorithm
 
 Calculates a digest of `input` using the SHA3-256 algorithm
 
-[6]: lib/sha3-256.janet#L143
+[6]: lib/sha3-256.janet#L146
 
 ## sha3-512/digest
 
@@ -85,5 +85,5 @@ Calculates a digest of `input` using the SHA3-256 algorithm
 
 Calculates a digest of `input` using the SHA3-512 algorithm
 
-[7]: lib/sha3-512.janet#L143
+[7]: lib/sha3-512.janet#L146
 

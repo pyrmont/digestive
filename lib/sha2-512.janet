@@ -98,7 +98,7 @@
   (var h6 (ops/bjoin 0x1f83d9ab 0xfb41bd6b))
   (var h7 (ops/bjoin 0x5be0cd19 0x137e2179))
   # Calculate padding length (for 128-byte blocks)
-  (def padlen (- 112 (mod (+ (length input) 1) 128)))
+  (def padlen (mod (- 111 (mod (length input) 128)) 128))
   # Convert input to buffer
   (def msg (buffer/new (+ (length input) 1 padlen 16)))
   (buffer/push-string msg input)

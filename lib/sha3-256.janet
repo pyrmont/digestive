@@ -128,16 +128,19 @@
 # Keccak padding: M || d || 00...00 || 10000000 where d=0x06 for SHA3
 (defn- keccak-pad
   [M rate]
-  # Add domain separation suffix d=0x06 for SHA-3
-  (buffer/push M 0x06)
-  # Calculate padding length
   (def len (length M))
-  (def pad-len (% (- rate len) rate))
-  # Add zeros
-  (for i 0 (- pad-len 1)
-    (buffer/push M 0x00))
-  # Add final 0x80 byte (sets high bit)
-  (buffer/push M 0x80)
+  (def q (% len rate))
+  (if (= q (- rate 1)) # test if only 1 byte of padding required
+    (buffer/push M 0x86)  # 0x06 | 0x80
+    (do
+      (buffer/push M 0x06)
+      (def new-len (length M))
+      (def padding-needed (- rate (% new-len rate)))
+      # Add zeros
+      (for i 0 (- padding-needed 1)
+        (buffer/push M 0x00))
+      # Add final 0x80
+      (buffer/push M 0x80)))
   M)
 
 (defn digest

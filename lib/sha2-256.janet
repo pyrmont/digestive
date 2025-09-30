@@ -75,7 +75,7 @@
   (var h6 (buffer/push-word @"" 0x1f83d9ab))
   (var h7 (buffer/push-word @"" 0x5be0cd19))
   # Calculate padding length
-  (def padlen (- 56 (mod (+ (length input) 1) 64)))
+  (def padlen (mod (- 55 (mod (length input) 64)) 64))
   # Convert input to buffer
   (def msg (buffer/new (+ (length input) 1 padlen 8)))
   (buffer/push-string msg input)
