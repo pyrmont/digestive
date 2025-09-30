@@ -5,12 +5,12 @@
 [icon]: https://github.com/pyrmont/digestive/workflows/test/badge.svg
 [status]: https://github.com/pyrmont/digestive/actions?query=workflow%3Atest
 
+Digestive is a pure Janet library for generating cryptographic digests. It does
+not require 64-bit integers.
+
 > [!WARNING]
 > The algorithms in Digestive were implemented with the assistance of LLMs.
 > The code has has not been extensively tested.
-
-Digestive is a pure Janet library for generating cryptographic digests. It does
-not require 64-bit integers.
 
 ## Installation
 
