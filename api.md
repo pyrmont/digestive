@@ -49,7 +49,7 @@ Calculates a digest of `input` using the SHA1 algorithm
 
 Calculates a digest of `input` using the SHA2 algorithm
 
-The value of `:kind` can be one of `:256`, `:384` and `:512`.
+The value of `kind` can be one of `:256`, `:384` and `:512`.
 
 [4]: lib/sha2.janet#L335
 
